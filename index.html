@@ -1,180 +1,598 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Micro-SaaS | Dashboard</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto Volatility Screener | Pro Tools</title>
     <style>
-        :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #334155;
-            --profit: #22c55e;
-            --loss: #ef4444;
-            --warning: #f59e0b;
-        }
+      :root {
+        --bg: #0b0e11;
+        --card: #151a20;
+        --text: #e1e1e1;
+        --green: #00c087;
+        --red: #ff554a;
+        --brand: #f3ba2f;
+        --border: #2b3139;
+        --hover: #1e252d;
+      }
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        margin: 0;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-        .dashboard-card {
-            background-color: var(--bg-card);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 400px;
-            border: 1px solid var(--border);
-        }
+      .header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 1rem;
-        }
+      .header h1 {
+        color: var(--brand);
+        margin: 0 0 0.5rem 0;
+      }
 
-        .header h2 {
-            margin: 0;
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
+      .controls {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+        width: 100%;
+        max-width: 900px;
+      }
 
-        /* Status Badge Styling */
-        .status-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .status-loading { background-color: #fef3c7; color: #92400e; }
-        .status-live { background-color: #dcfce7; color: #166534; }
-        .status-error { background-color: #fee2e2; color: #991b1b; }
+      .search-bar {
+        flex-grow: 1;
+        padding: 0.8rem 1rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        color: white;
+        border-radius: 8px;
+        font-size: 1rem;
+        outline: none;
+      }
 
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 0.85rem 0;
-            font-size: 0.95rem;
-        }
+      .search-bar:focus {
+        border-color: var(--brand);
+      }
 
-        .label { color: var(--text-muted); }
-        .value { font-weight: 500; }
-        
-        .pnl-container {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px dashed var(--border);
-            text-align: center;
-        }
+      .btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        color: white;
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s;
+      }
 
-        .pnl-value {
-            font-size: 2rem;
-            font-weight: 700;
-            display: block;
-            margin-top: 0.5rem;
-        }
-        .profit { color: var(--profit); }
-        .loss { color: var(--loss); }
+      .btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
 
-        .loading-text {
-            color: var(--warning);
-            font-size: 0.85rem;
-            text-align: center;
-            line-height: 1.5;
+      .screener-container {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        width: 100%;
+        max-width: 900px;
+        height: 600px; /* Fixed height for scrolling */
+        overflow-y: auto;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      /* Custom Scrollbar */
+      .screener-container::-webkit-scrollbar {
+        width: 8px;
+      }
+      .screener-container::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      .screener-container::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 4px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      thead {
+        position: sticky;
+        top: 0;
+        background: #101419;
+        z-index: 10;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+      }
+
+      th,
+      td {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      th {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        color: #848e9c;
+      }
+
+      tr:hover td {
+        background: var(--hover);
+      }
+
+      .symbol {
+        font-weight: 700;
+        font-size: 1.05rem;
+      }
+      .price-col {
+        font-family: monospace;
+        font-size: 1.05rem;
+      }
+
+      .flash-up {
+        animation: flashGreen 0.4s ease-out;
+      }
+      .flash-down {
+        animation: flashRed 0.4s ease-out;
+      }
+
+      @keyframes flashGreen {
+        0% {
+          color: #fff;
+          text-shadow: 0 0 15px var(--green);
+          background: rgba(0, 192, 135, 0.1);
         }
+        100% {
+          color: var(--green);
+          background: transparent;
+        }
+      }
+
+      @keyframes flashRed {
+        0% {
+          color: #fff;
+          text-shadow: 0 0 15px var(--red);
+          background: rgba(255, 85, 74, 0.1);
+        }
+        100% {
+          color: var(--red);
+          background: transparent;
+        }
+      }
+
+      .positive {
+        color: var(--green);
+      }
+      .negative {
+        color: var(--red);
+      }
+
+      .trade-btn {
+        background: var(--brand);
+        color: #000;
+        text-decoration: none;
+        padding: 0.4rem 1rem;
+        border-radius: 4px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        transition: opacity 0.2s;
+      }
+
+      .trade-btn:hover {
+        opacity: 0.8;
+      }
+
+      .status {
+        margin-top: 1rem;
+        font-size: 0.85rem;
+        color: #848e9c;
+      }
+
+      .live-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: var(--green);
+        border-radius: 50%;
+        margin-right: 6px;
+        box-shadow: 0 0 8px var(--green);
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
     </style>
-</head>
-<body>
-
-    <div class="dashboard-card">
-        <div class="header">
-            <h2>Bot Overview</h2>
-            <span id="badge" class="status-badge status-loading">Waking Server...</span>
-        </div>
-        
-        <div id="content">
-            <p class="loading-text" id="loader">
-                Pinging Render backend.<br>
-                Free tier instances spin down after inactivity and may take <b>~50 seconds</b> to wake up.
-            </p>
-            <!-- Data will render here via JavaScript -->
-        </div>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Live Market Screener</h1>
+      <p>Real-time data directly from Delta Exchange. 0ms Latency.</p>
     </div>
-    
+
+    <div class="controls">
+      <input
+        type="text"
+        id="search"
+        class="search-bar"
+        placeholder="Search pairs (e.g., BTC, SOL, DOGE)..."
+      />
+      <button class="btn" onclick="sortByChange('desc')">🔥 Top Gainers</button>
+      <button class="btn" onclick="sortByChange('asc')">🩸 Top Losers</button>
+    </div>
+
+    <div class="screener-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Pair</th>
+            <th>Mark Price (USD)</th>
+            <th>24h Volatility</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="screener-body"></tbody>
+      </table>
+    </div>
+
+    <div class="status">
+      <span class="live-dot"></span>
+      <span id="ws-status">Connecting to Delta Exchange...</span>
+    </div>
+
     <script>
-        // Replace with your actual Render URL
-        const backendUrl = "https://trading-backend-p9o9.onrender.com/api/signals"; 
-        
-        const contentDiv = document.getElementById('content');
-        const badge = document.getElementById('badge');
+      // 1. Array of 50+ Popular Coins
+      const symbols = [
+        "BTCUSD",
+        "ETHUSD",
+        "SOLUSD",
+        "BEATUSD",
+        "BILLUSD",
+        "PAXGUSD",
+        "EDENUSD",
+        "XAUTUSD",
+        "XRPUSD",
+        "ZECUSD",
+        "HANAUSD",
+        "DOGEUSD",
+        "VVVUSD",
+        "RIVERUSD",
+        "HYPEUSD",
+        "SKYAIUSD",
+        "NEARUSD",
+        "AAVEUSD",
+        "BNBUSD",
+        "ONDOUSD",
+        "EIGENUSD",
+        "LABUSD",
+        "LINKUSD",
+        "BCHUSD",
+        "AIGENSYNUSD",
+        "AVAXUSD",
+        "LTCUSD",
+        "ADAUSD",
+        "LITUSD",
+        "TONUSD",
+        "RAVEUSD",
+        "JTOUSD",
+        "BUSD",
+        "MUSD",
+        "SLVONUSD",
+        "MEUSD",
+        "HUSD",
+        "PIPPINUSD",
+        "SUIUSD",
+        "SIRENUSD",
+        "DOTUSD",
+        "UNIUSD",
+        "ALTUSD",
+        "INJUSD",
+        "VIRTUALUSD",
+        "WLDUSD",
+        "AIOTUSD",
+        "ETCUSD",
+        "KITEUSD",
+        "FARTCOINUSD",
+        "1MBABYDOGEUSD",
+        "TAOUSD",
+        "SAHARAUSD",
+        "KAITOUSD",
+        "DASHUSD",
+        "PROVEUSD",
+        "XMRUSD",
+        "DUSKUSD",
+        "AINUSD",
+        "QQQXUSD",
+        "JUPUSD",
+        "TRXUSD",
+        "NVDAXUSD",
+        "TSLAXUSD",
+        "BIOUSD",
+        "TRUMPUSD",
+        "ARCUSD",
+        "PARTIUSD",
+        "ASTERUSD",
+        "CHIPUSD",
+        "HIVEUSD",
+        "FFUSD",
+        "BASEDUSD",
+        "AIOUSD",
+        "SPYXUSD",
+        "ORDIUSD",
+        "DYDXUSD",
+        "IPUSD",
+        "1000SATSUSD",
+        "TSTUSD",
+        "REDUSD",
+        "PENDLEUSD",
+        "ZKUSD",
+        "1000PEPEUSD",
+        "SAGAUSD",
+        "EVAAUSD",
+        "MANTAUSD",
+        "AMZNXUSD",
+        "COOKIEUSD",
+        "FILUSD",
+        "ETHFIUSD",
+        "GIGGLEUSD",
+        "DOGSUSD",
+        "SWARMSUSD",
+        "SIGNUSD",
+        "AAPLXUSD",
+        "RUNEUSD",
+        "1000FLOKIUSD",
+        "COINXUSD",
+        "PENGUUSD",
+        "SUSD",
+        "ZORAUSD",
+        "CROSSUSD",
+        "PNUTUSD",
+        "BBUSD",
+        "LIGHTUSD",
+        "1000SHIBUSD",
+        "TIAUSD",
+        "ENJUSD",
+        "GOOGLXUSD",
+        "MONUSD",
+        "OPUSD",
+        "WLFIUSD",
+        "CAKEUSD",
+        "ENAUSD",
+        "SPXUSD",
+        "SOLVUSD",
+        "SEIUSD",
+        "BLESSUSD",
+        "PIEVERSEUSD",
+        "ARIAUSD",
+        "STRKUSD",
+        "MOODENGUSD",
+        "POLUSD",
+        "DEEPUSD",
+        "ARUSD",
+        "NOTUSD",
+        "XLMUSD",
+        "ZROUSD",
+        "API3USD",
+        "SOPHUSD",
+        "PIUSD",
+        "GRIFFAINUSD",
+        "PUMPUSD",
+        "METAXUSD",
+        "SKLUSD",
+        "ZENUSD",
+        "GOATUSD",
+        "WCTUSD",
+        "ARBUSD",
+        "JASMYUSD",
+        "POPCATUSD",
+        "CRCLXUSD",
+        "COAIUSD",
+        "1000BONKUSD",
+        "MEMEUSD",
+        "ORDERUSD",
+        "NEIROUSD",
+        "WIFUSD",
+        "AVAAIUSD",
+        "TOWNSUSD",
+        "LAYERUSD",
+        "SONICUSD",
+        "TNSRUSD",
+        "AXSUSD",
+        "STXUSD",
+        "RSRUSD",
+        "MOVEUSD",
+        "HBARUSD",
+        "RAREUSD",
+        "APTUSD",
+        "ACTUSD",
+        "INITUSD",
+        "AIXBTUSD",
+        "MASKUSD",
+        "XAIUSD",
+        "STBLUSD",
+        "BERAUSD",
+        "XPLUSD",
+        "TRBUSD",
+        "BLURUSD",
+        "XANUSD",
+        "VANAUSD",
+        "AUCTIONUSD",
+        "MUBARAKUSD",
+        "KSMUSD",
+        "IOTAUSD",
+        "SUSHIUSD",
+        "MMTUSD",
+        "PEOPLEUSD",
+        "FRAXUSD",
+        "MELANIAUSD",
+        "SUNUSD",
+        "USUALUSD",
+        "LDOUSD",
+        "GLMUSD",
+        "MANAUSD",
+        "GALAUSD",
+        "BMTUSD",
+        "IOUSD",
+        "LISTAUSD",
+      ];
+      // YOUR AFFILIATE CODE HERE
+      const myAffiliateCode = "STJSWZ";
 
-        async function fetchBotData() {
-            try {
-                const response = await fetch(backendUrl);
-                if (!response.ok) throw new Error('Network response failed');
-                
-                const data = await response.json();
-                const trade = data.latest_trade;
-                
-                // Update UI state to Live
-                badge.textContent = "Live";
-                badge.className = "status-badge status-live";
+      const tbody = document.getElementById("screener-body");
+      const statusText = document.getElementById("ws-status");
+      const searchInput = document.getElementById("search");
 
-                // Format P/L for color coding and signs
-                const isProfit = trade.actual_pnl >= 0;
-                const pnlClass = isProfit ? 'profit' : 'loss';
-                const sign = isProfit ? '+' : '';
+      // 2. High-Performance DOM Cache
+      const domCache = {};
+      const dataState = {}; // Stores latest prices and changes for sorting
 
-                // Render the data cleanly
-                contentDiv.innerHTML = `
-                    <div class="data-row">
-                        <span class="label">System Status Now</span>
-                        <span class="value" style="color: var(--text-main)">Connected</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="label">Trading Pair</span>
-                        <span class="value">${trade.symbol}</span>
-                    </div>
-                    <div class="pnl-container">
-                        <span class="label">Latest Trade P/L</span>
-                        <span class="pnl-value ${pnlClass}">${sign}$${trade.actual_pnl.toFixed(2)}</span>
-                    </div>
-                `;
-            } catch (error) {
-                // Handle API connection errors
-                badge.textContent = "Offline";
-                badge.className = "status-badge status-error";
-                
-                contentDiv.innerHTML = `
-                    <div class="data-row" style="justify-content: center; margin-top: 1rem;">
-                        <span class="loss" style="text-align: center; line-height: 1.5;">
-                            Connection to API failed.<br>
-                            Ensure your Render backend is deployed and the URL is correct.
-                        </span>
-                    </div>
-                `;
+      // Render initial table
+      symbols.forEach((sym) => {
+        const tr = document.createElement("tr");
+        tr.id = `row-${sym}`;
+
+        // Format coin name (e.g. BTCUSD -> BTC/USD)
+        const formattedName = sym.replace("USD", "/USD");
+        const affiliateLink = `https://www.delta.exchange?code=${myAffiliateCode}`;
+
+        tr.innerHTML = `
+                <td class="symbol">${formattedName}</td>
+                <td id="price-${sym}" class="price-col">Connecting...</td>
+                <td id="change-${sym}">--</td>
+                <td><a href="${affiliateLink}" target="_blank" class="trade-btn">Trade</a></td>
+            `;
+        tbody.appendChild(tr);
+
+        // Cache elements so browser doesn't search for them every millisecond
+        domCache[sym] = {
+          row: tr,
+          priceEl: document.getElementById(`price-${sym}`),
+          changeEl: document.getElementById(`change-${sym}`),
+        };
+
+        dataState[sym] = { price: 0, change: 0 };
+      });
+
+      // Search Filter Logic
+      searchInput.addEventListener("input", (e) => {
+        const term = e.target.value.toUpperCase();
+        symbols.forEach((sym) => {
+          if (sym.includes(term)) {
+            domCache[sym].row.style.display = "";
+          } else {
+            domCache[sym].row.style.display = "none";
+          }
+        });
+      });
+
+      // Sorting Logic (Top Gainers / Losers)
+      window.sortByChange = function (direction) {
+        const sortedSymbols = [...symbols].sort((a, b) => {
+          if (direction === "desc")
+            return dataState[b].change - dataState[a].change;
+          return dataState[a].change - dataState[b].change;
+        });
+
+        // Reorder the DOM based on sorted array
+        sortedSymbols.forEach((sym) => {
+          tbody.appendChild(domCache[sym].row);
+        });
+      };
+
+      // 3. Delta Exchange WebSockets connection
+      const ws = new WebSocket("wss://public-socket.india.delta.exchange");
+
+      ws.onopen = () => {
+        statusText.textContent = `Live tracking ${symbols.length} pairs`;
+
+        // Delta allows up to 100 symbols per connection. We are sending ~53.
+        const subscribeMsg = {
+          type: "subscribe",
+          payload: {
+            channels: [
+              {
+                name: "ticker",
+                symbols: symbols,
+              },
+            ],
+          },
+        };
+        ws.send(JSON.stringify(subscribeMsg));
+      };
+
+      ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.type === "ticker" && data.d) {
+          const tick = data.d[0];
+          const sym = data.sy;
+
+          // If it's a symbol we care about, update UI
+          if (domCache[sym]) {
+            const newPrice = parseFloat(tick.m);
+            const change24h = parseFloat(tick.m24hc);
+
+            const cache = domCache[sym];
+            const state = dataState[sym];
+
+            // Format appropriately based on asset value
+            let formattedPrice = newPrice.toFixed(4);
+            if (newPrice > 10) formattedPrice = newPrice.toFixed(2);
+            if (newPrice > 1000)
+              formattedPrice = newPrice.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
+
+            // Trigger flash animation only if price changed
+            if (state.price !== 0 && newPrice !== state.price) {
+              cache.priceEl.className = "price-col"; // reset
+              void cache.priceEl.offsetWidth; // trigger reflow to restart CSS animation
+              cache.priceEl.className =
+                newPrice > state.price
+                  ? "price-col flash-up"
+                  : "price-col flash-down";
             }
+
+            // Update Text
+            cache.priceEl.textContent = `$${formattedPrice}`;
+
+            // Update Change Color & Text
+            if (change24h > 0) {
+              cache.changeEl.textContent = `+${change24h.toFixed(2)}%`;
+              cache.changeEl.className = "positive";
+            } else {
+              cache.changeEl.textContent = `${change24h.toFixed(2)}%`;
+              cache.changeEl.className = "negative";
+            }
+
+            // Save latest state
+            state.price = newPrice;
+            state.change = change24h;
+          }
         }
+      };
 
-        // Trigger the fetch immediately when the page loads
-        fetchBotData();
+      ws.onclose = () => {
+        statusText.textContent = "Disconnected. Refresh the page to reconnect.";
+        document.querySelector(".live-dot").style.background = "red";
+      };
     </script>
-
-</body>
+  </body>
 </html>
