@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Micro-SaaS | Dashboard</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --profit: #22c55e;
+            --loss: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .dashboard-card {
+            background-color: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* Status Badge Styling */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .status-loading { background-color: #fef3c7; color: #92400e; }
+        .status-live { background-color: #dcfce7; color: #166534; }
+        .status-error { background-color: #fee2e2; color: #991b1b; }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.85rem 0;
+            font-size: 0.95rem;
+        }
+
+        .label { color: var(--text-muted); }
+        .value { font-weight: 500; }
+        
+        .pnl-container {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px dashed var(--border);
+            text-align: center;
+        }
+
+        .pnl-value {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+            margin-top: 0.5rem;
+        }
+        .profit { color: var(--profit); }
+        .loss { color: var(--loss); }
+
+        .loading-text {
+            color: var(--warning);
+            font-size: 0.85rem;
+            text-align: center;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-card">
+        <div class="header">
+            <h2>Bot Overview</h2>
+            <span id="badge" class="status-badge status-loading">Waking Server...</span>
+        </div>
+        
+        <div id="content">
+            <p class="loading-text" id="loader">
+                Pinging Render backend.<br>
+                Free tier instances spin down after inactivity and may take <b>~50 seconds</b> to wake up.
+            </p>
+            <!-- Data will render here via JavaScript -->
+        </div>
+    </div>
+    
+    <script>
+        // Replace with your actual Render URL
+        const backendUrl = "https://trading-backend-p9o9.onrender.com/api/signals"; 
+        
+        const contentDiv = document.getElementById('content');
+        const badge = document.getElementById('badge');
+
+        async function fetchBotData() {
+            try {
+                const response = await fetch(backendUrl);
+                if (!response.ok) throw new Error('Network response failed');
+                
+                const data = await response.json();
+                const trade = data.latest_trade;
+                
+                // Update UI state to Live
+                badge.textContent = "Live";
+                badge.className = "status-badge status-live";
+
+                // Format P/L for color coding and signs
+                const isProfit = trade.actual_pnl >= 0;
+                const pnlClass = isProfit ? 'profit' : 'loss';
+                const sign = isProfit ? '+' : '';
+
+                // Render the data cleanly
+                contentDiv.innerHTML = `
+                    <div class="data-row">
+                        <span class="label">System Status</span>
+                        <span class="value" style="color: var(--text-main)">Connected</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="label">Trading Pair</span>
+                        <span class="value">${trade.symbol}</span>
+                    </div>
+                    <div class="pnl-container">
+                        <span class="label">Latest Trade P/L</span>
+                        <span class="pnl-value ${pnlClass}">${sign}$${trade.actual_pnl.toFixed(2)}</span>
+                    </div>
+                `;
+            } catch (error) {
+                // Handle API connection errors
+                badge.textContent = "Offline";
+                badge.className = "status-badge status-error";
+                
+                contentDiv.innerHTML = `
+                    <div class="data-row" style="justify-content: center; margin-top: 1rem;">
+                        <span class="loss" style="text-align: center; line-height: 1.5;">
+                            Connection to API failed.<br>
+                            Ensure your Render backend is deployed and the URL is correct.
+                        </span>
+                    </div>
+                `;
+            }
+        }
+
+        // Trigger the fetch immediately when the page loads
+        fetchBotData();
+    </script>
+
+</body>
+</html>
