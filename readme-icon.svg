@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e252d"/>
+      <stop offset="100%" stop-color="#151a20"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="300" height="200" rx="16" fill="url(#bg)" stroke="#2b3139" stroke-width="2"/>
+  
+  <!-- Grid lines -->
+  <line x1="40" y1="50" x2="260" y2="50" stroke="#2b3139" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="40" y1="100" x2="260" y2="100" stroke="#2b3139" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="40" y1="150" x2="260" y2="150" stroke="#2b3139" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="100" y1="30" x2="100" y2="170" stroke="#2b3139" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="180" y1="30" x2="180" y2="170" stroke="#2b3139" stroke-width="1" stroke-dasharray="4 4"/>
+  
+  <!-- Red bar -->
+  <rect x="70" y="110" width="16" height="32" rx="3" fill="#ff554a" opacity="0.9"/>
+  <line x1="78" y1="110" x2="78" y2="95" stroke="#ff554a" stroke-width="2"/>
+  
+  <!-- Green bar -->
+  <rect x="145" y="75" width="16" height="40" rx="3" fill="#00c087" opacity="0.9"/>
+  <line x1="153" y1="75" x2="153" y2="60" stroke="#00c087" stroke-width="2"/>
+  
+  <!-- Upward trending line -->
+  <polyline points="90,145 115,130 140,115 165,95 190,80 215,65 240,55" fill="none" stroke="#f3ba2f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Live dot -->
+  <circle cx="240" cy="40" r="6" fill="#00c087">
+    <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="240" cy="40" r="10" fill="none" stroke="#00c087" stroke-width="1" opacity="0.4">
+    <animate attributeName="r" values="6;14" dur="1.5s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.6;0" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Magnifier icon -->
+  <g transform="translate(240, 170)">
+    <circle cx="0" cy="0" r="14" fill="none" stroke="#f3ba2f" stroke-width="2.5"/>
+    <line x1="8" y1="8" x2="18" y2="18" stroke="#f3ba2f" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</svg>
