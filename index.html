@@ -3,7 +3,57 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Crypto Volatility Screener | Pro Tools</title>
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>Live Crypto Market Screener & Volatility Tracker | Delta Exchange Real-Time Data</title>
+    <meta name="title" content="Live Crypto Market Screener & Volatility Tracker | Delta Exchange Real-Time Data" />
+    <meta name="description" content="Real-time live crypto market screener tracking 120+ pairs with 0ms latency WebSocket price feeds directly from Delta Exchange. Sort top gainers, top losers, and track 24h volatility." />
+    <meta name="keywords" content="crypto screener, live crypto prices, crypto volatility tracker, delta exchange scanner, bitcoin price live, crypto market scanner, top crypto gainers, top crypto losers, real-time crypto ticker" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Crypto Volatility Screener" />
+    <link rel="canonical" href="https://crypto-stock-scanner.vercel.app/" />
+
+    <!-- Open Graph / Facebook / Vercel Card Preview -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://crypto-stock-scanner.vercel.app/" />
+    <meta property="og:title" content="Live Crypto Market Screener & Volatility Tracker" />
+    <meta property="og:description" content="Track 120+ crypto trading pairs in real-time with live WebSocket streaming prices, 24h volatility, top gainers, and top losers on Delta Exchange." />
+    <meta property="og:image" content="https://crypto-stock-scanner.vercel.app/readme-icon.svg" />
+    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:image:alt" content="Crypto Market Screener Logo" />
+    <meta property="og:site_name" content="Live Market Screener" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://crypto-stock-scanner.vercel.app/" />
+    <meta name="twitter:title" content="Live Crypto Market Screener & Volatility Tracker" />
+    <meta name="twitter:description" content="Track 120+ crypto trading pairs in real-time with live WebSocket streaming prices, 24h volatility, top gainers, and top losers on Delta Exchange." />
+    <meta name="twitter:image" content="https://crypto-stock-scanner.vercel.app/readme-icon.svg" />
+
+    <!-- Favicons & App Icons -->
+    <link rel="icon" type="image/svg+xml" href="readme-icon.svg" />
+    <link rel="alternate icon" type="image/svg+xml" href="readme-icon.svg" />
+    <link rel="apple-touch-icon" href="readme-icon.svg" />
+
+    <!-- Structured Data (Schema.org JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Live Crypto Market Screener",
+        "url": "https://crypto-stock-scanner.vercel.app/",
+        "description": "Real-time crypto market screener tracking 120+ pairs with live WebSocket price streams from Delta Exchange, 24h volatility stats, top gainers, and top losers.",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript and WebSockets",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
+
     <style>
       :root {
         --bg: #0b0e11;
@@ -30,6 +80,26 @@
       .header {
         text-align: center;
         margin-bottom: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .logo-wrapper {
+        margin-bottom: 0.75rem;
+      }
+
+      .header-logo {
+        max-width: 140px;
+        height: auto;
+        border-radius: 8px;
+        transition: transform 0.3s ease, filter 0.3s ease;
+        filter: drop-shadow(0 4px 12px rgba(243, 186, 47, 0.25));
+      }
+
+      .header-logo:hover {
+        transform: scale(1.05);
+        filter: drop-shadow(0 6px 18px rgba(243, 186, 47, 0.4));
       }
 
       .header h1 {
@@ -221,40 +291,46 @@
     </style>
   </head>
   <body>
-    <div class="header">
+    <header class="header">
+      <div class="logo-wrapper">
+        <img src="readme-icon.svg" alt="Crypto Market Screener Icon" class="header-logo" width="140" height="93" />
+      </div>
       <h1>Live Market Screener</h1>
       <p>Real-time data directly from Delta Exchange. 0ms Latency.</p>
-    </div>
+    </header>
 
-    <div class="controls">
-      <input
-        type="text"
-        id="search"
-        class="search-bar"
-        placeholder="Search pairs (e.g., BTC, SOL, DOGE)..."
-      />
-      <button class="btn" onclick="sortByChange('desc')">🔥 Top Gainers</button>
-      <button class="btn" onclick="sortByChange('asc')">🩸 Top Losers</button>
-    </div>
+    <main style="width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center;">
+      <div class="controls">
+        <input
+          type="text"
+          id="search"
+          class="search-bar"
+          placeholder="Search pairs (e.g., BTC, SOL, DOGE)..."
+          aria-label="Search crypto pairs"
+        />
+        <button class="btn" onclick="sortByChange('desc')" aria-label="Sort by Top Gainers">🔥 Top Gainers</button>
+        <button class="btn" onclick="sortByChange('asc')" aria-label="Sort by Top Losers">🩸 Top Losers</button>
+      </div>
 
-    <div class="screener-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Pair</th>
-            <th>Mark Price (USD)</th>
-            <th>24h Volatility</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="screener-body"></tbody>
-      </table>
-    </div>
+      <div class="screener-container">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Pair</th>
+              <th scope="col">Mark Price (USD)</th>
+              <th scope="col">24h Volatility</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody id="screener-body"></tbody>
+        </table>
+      </div>
+    </main>
 
-    <div class="status">
-      <span class="live-dot"></span>
+    <footer class="status">
+      <span class="live-dot" aria-hidden="true"></span>
       <span id="ws-status">Connecting to Delta Exchange...</span>
-    </div>
+    </footer>
 
     <script>
       // 1. Array of 50+ Popular Coins
