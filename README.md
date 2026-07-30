@@ -38,10 +38,6 @@ Real-time crypto market screener pulling live ticker data directly from **Delta 
 
 - `index.html` - Complete single-file application (HTML + CSS + JS)
 
-## Screenshot
-
-![Screener Preview](readme-icon.svg)
-
 ## License
 
 Open source and free to use.
