@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1e252d"/>
-      <stop offset="100%" stop-color="#151a20"/>
+      <stop offset="0" stop-color="#1e252d"/>
+      <stop offset="1" stop-color="#151a20"/>
     </linearGradient>
   </defs>
   <rect x="0" y="0" width="300" height="200" rx="16" fill="url(#bg)" stroke="#2b3139" stroke-width="2"/>
@@ -26,13 +26,8 @@
   <polyline points="90,145 115,130 140,115 165,95 190,80 215,65 240,55" fill="none" stroke="#f3ba2f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
   
   <!-- Live dot -->
-  <circle cx="240" cy="40" r="6" fill="#00c087">
-    <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="240" cy="40" r="10" fill="none" stroke="#00c087" stroke-width="1" opacity="0.4">
-    <animate attributeName="r" values="6;14" dur="1.5s" repeatCount="indefinite"/>
-    <animate attributeName="opacity" values="0.6;0" dur="1.5s" repeatCount="indefinite"/>
-  </circle>
+  <circle cx="240" cy="40" r="6" fill="#00c087"/>
+  <circle cx="240" cy="40" r="10" fill="none" stroke="#00c087" stroke-width="1" opacity="0.4"/>
   
   <!-- Magnifier icon -->
   <g transform="translate(240, 170)">
