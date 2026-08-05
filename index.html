@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <!-- Primary SEO Meta Tags -->
     <title>Live Crypto Market Screener & Volatility Tracker | Delta Exchange Real-Time Data</title>
     <meta name="title" content="Live Crypto Market Screener & Volatility Tracker | Delta Exchange Real-Time Data" />
-    <meta name="description" content="Real-time live crypto market screener tracking 120+ pairs with 0ms latency WebSocket price feeds directly from Delta Exchange. Sort top gainers, top losers, and track 24h volatility." />
-    <meta name="keywords" content="crypto screener, live crypto prices, crypto volatility tracker, delta exchange scanner, bitcoin price live, crypto market scanner, top crypto gainers, top crypto losers, real-time crypto ticker" />
+    <meta name="description" content="Real-time live crypto market screener tracking 120+ pairs with 0ms latency WebSocket price feeds directly from Delta Exchange. Sort top gainers, top losers, track 24h high/low/volume, live sparkline charts, price alerts, and a personal watchlist." />
+    <meta name="keywords" content="crypto screener, live crypto prices, crypto volatility tracker, delta exchange scanner, bitcoin price live, crypto market scanner, top crypto gainers, top crypto losers, real-time crypto ticker, crypto price alerts, crypto watchlist, crypto sparklines" />
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Crypto Volatility Screener" />
     <meta name="google-site-verification" content="SNezfnIEsh1eAusbEpfyt91cKgTIXwRboDI-55tKCxg" />
@@ -18,7 +18,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://crypto-stock-scanner.vercel.app/" />
     <meta property="og:title" content="Live Crypto Market Screener & Volatility Tracker" />
-    <meta property="og:description" content="Track 120+ crypto trading pairs in real-time with live WebSocket streaming prices, 24h volatility, top gainers, and top losers on Delta Exchange." />
+    <meta property="og:description" content="Track 120+ crypto trading pairs in real-time with live WebSocket streaming prices, 24h volatility, top gainers, top losers, sparklines and price alerts on Delta Exchange." />
     <meta property="og:image" content="https://crypto-stock-scanner.vercel.app/readme-icon.svg" />
     <meta property="og:image:type" content="image/svg+xml" />
     <meta property="og:image:alt" content="Crypto Market Screener Logo" />
@@ -43,7 +43,7 @@
         "@type": "WebApplication",
         "name": "Live Crypto Market Screener",
         "url": "https://crypto-stock-scanner.vercel.app/",
-        "description": "Real-time crypto market screener tracking 120+ pairs with live WebSocket price streams from Delta Exchange, 24h volatility stats, top gainers, and top losers.",
+        "description": "Real-time crypto market screener tracking 120+ pairs with live WebSocket price streams from Delta Exchange, 24h volatility stats, top gainers, top losers, price alerts and watchlists.",
         "applicationCategory": "FinanceApplication",
         "operatingSystem": "All",
         "browserRequirements": "Requires JavaScript and WebSockets",
@@ -67,12 +67,16 @@
         --hover: #1e252d;
       }
 
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         font-family: "Inter", system-ui, sans-serif;
         background-color: var(--bg);
         color: var(--text);
         margin: 0;
-        padding: 2rem;
+        padding: 2rem 1rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -80,7 +84,7 @@
 
       .header {
         text-align: center;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.25rem;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -91,7 +95,7 @@
       }
 
       .header-logo {
-        max-width: 140px;
+        max-width: 120px;
         height: auto;
         border-radius: 8px;
         transition: transform 0.3s ease, filter 0.3s ease;
@@ -105,20 +109,72 @@
 
       .header h1 {
         color: var(--brand);
-        margin: 0 0 0.5rem 0;
+        margin: 0 0 0.4rem 0;
       }
 
+      .header p {
+        margin: 0;
+        color: #848e9c;
+        font-size: 0.9rem;
+      }
+
+      .layout {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* ---------- Market Overview Bar ---------- */
+      .overview {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+
+      .stat {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 0.55rem 1.1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 120px;
+      }
+
+      .stat-label {
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #848e9c;
+      }
+
+      .stat-value {
+        font-weight: 700;
+        font-size: 1rem;
+        margin-top: 0.2rem;
+        text-align: center;
+      }
+
+      /* ---------- Controls & Tabs ---------- */
       .controls {
         display: flex;
-        gap: 1rem;
-        margin-bottom: 1rem;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 0.75rem;
         width: 100%;
-        max-width: 900px;
       }
 
       .search-bar {
         flex-grow: 1;
-        padding: 0.8rem 1rem;
+        min-width: 220px;
+        padding: 0.7rem 1rem;
         background: var(--card);
         border: 1px solid var(--border);
         color: white;
@@ -135,10 +191,11 @@
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid var(--border);
         color: white;
-        padding: 0.8rem 1.5rem;
+        padding: 0.7rem 1.1rem;
         border-radius: 8px;
         cursor: pointer;
         font-weight: 600;
+        font-size: 0.9rem;
         transition: all 0.2s;
       }
 
@@ -146,18 +203,47 @@
         background: rgba(255, 255, 255, 0.1);
       }
 
+      .tabs {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 1rem;
+      }
+
+      .tab {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 0.45rem 1rem;
+        border-radius: 999px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+      }
+
+      .tab:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .tab.active {
+        background: var(--brand);
+        color: #000;
+        border-color: var(--brand);
+      }
+
+      /* ---------- Screener Table ---------- */
       .screener-container {
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: 12px;
         width: 100%;
-        max-width: 900px;
-        height: 600px; /* Fixed height for scrolling */
+        height: 620px;
         overflow-y: auto;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
       }
 
-      /* Custom Scrollbar */
       .screener-container::-webkit-scrollbar {
         width: 8px;
       }
@@ -173,6 +259,7 @@
         width: 100%;
         border-collapse: collapse;
         text-align: left;
+        table-layout: auto;
       }
 
       thead {
@@ -185,14 +272,37 @@
 
       th,
       td {
-        padding: 1rem 1.5rem;
+        padding: 0.7rem 0.8rem;
         border-bottom: 1px solid var(--border);
+        white-space: nowrap;
       }
 
       th {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         text-transform: uppercase;
         color: #848e9c;
+        letter-spacing: 0.03em;
+      }
+
+      th.sortable {
+        cursor: pointer;
+        user-select: none;
+      }
+
+      th.sortable:hover {
+        color: #fff;
+      }
+
+      th.sortable.sorted-asc::after {
+        content: " \25B2";
+        font-size: 0.6em;
+        color: var(--brand);
+      }
+
+      th.sortable.sorted-desc::after {
+        content: " \25BC";
+        font-size: 0.6em;
+        color: var(--brand);
       }
 
       tr:hover td {
@@ -201,11 +311,12 @@
 
       .symbol {
         font-weight: 700;
-        font-size: 1.05rem;
+        font-size: 0.95rem;
       }
+
       .price-col {
         font-family: monospace;
-        font-size: 1.05rem;
+        font-size: 0.95rem;
       }
 
       .flash-up {
@@ -246,14 +357,59 @@
         color: var(--red);
       }
 
+      .muted {
+        color: #848e9c;
+      }
+
+      /* Star (watchlist) + Bell (alert) buttons */
+      .star-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.15rem;
+        line-height: 1;
+        color: #848e9c;
+        padding: 0.1rem 0.3rem;
+        transition: transform 0.15s;
+      }
+
+      .star-btn:hover {
+        transform: scale(1.25);
+      }
+
+      .star-btn.on {
+        color: var(--brand);
+      }
+
+      .bell-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        line-height: 1;
+        filter: grayscale(1);
+        opacity: 0.5;
+        padding: 0.1rem 0.3rem;
+        transition: all 0.15s;
+      }
+
+      .bell-btn:hover {
+        opacity: 1;
+      }
+
+      .bell-btn.on {
+        filter: none;
+        opacity: 1;
+      }
+
       .trade-btn {
         background: var(--brand);
         color: #000;
         text-decoration: none;
-        padding: 0.4rem 1rem;
+        padding: 0.35rem 0.9rem;
         border-radius: 4px;
         font-weight: 700;
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         transition: opacity 0.2s;
       }
 
@@ -261,10 +417,30 @@
         opacity: 0.8;
       }
 
+      /* ---------- Sparklines ---------- */
+      .sparkline svg {
+        display: block;
+      }
+
+      /* ---------- Status / Footer ---------- */
       .status {
         margin-top: 1rem;
         font-size: 0.85rem;
         color: #848e9c;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.4rem;
+        text-align: center;
+      }
+
+      .status a {
+        color: var(--brand);
+        text-decoration: none;
+      }
+
+      .status a:hover {
+        text-decoration: underline;
       }
 
       .live-dot {
@@ -289,18 +465,252 @@
           opacity: 1;
         }
       }
+
+      /* ---------- Ad Slots ---------- */
+      .ad-slot {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin: 0.75rem 0;
+      }
+
+      .ad-slot-main {
+        min-height: 90px;
+        background: var(--card);
+        border: 1px dashed var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      .ad-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #5c6670;
+        font-size: 0.78rem;
+        min-height: 90px;
+        width: 728px;
+        max-width: 100%;
+        text-align: center;
+        padding: 0.5rem;
+      }
+
+      .ad-rect-placeholder {
+        min-height: 250px;
+      }
+
+      /* ---------- Alert Modal ---------- */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 1rem;
+      }
+
+      .modal-overlay.open {
+        display: flex;
+      }
+
+      .modal {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1.5rem;
+        width: 360px;
+        max-width: 92vw;
+      }
+
+      .modal h3 {
+        margin: 0 0 0.25rem;
+        color: var(--brand);
+      }
+
+      .modal .modal-sub {
+        margin: 0 0 1rem;
+        color: #848e9c;
+        font-size: 0.85rem;
+      }
+
+      .modal label {
+        display: block;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        color: #848e9c;
+        margin: 0.6rem 0 0.3rem;
+      }
+
+      .modal input,
+      .modal select {
+        width: 100%;
+        padding: 0.6rem;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        color: #fff;
+        border-radius: 8px;
+        box-sizing: border-box;
+        font-size: 0.95rem;
+        outline: none;
+      }
+
+      .modal input:focus,
+      .modal select:focus {
+        border-color: var(--brand);
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .alert-list {
+        margin-top: 0.75rem;
+        max-height: 180px;
+        overflow-y: auto;
+      }
+
+      .alert-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.45rem 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 0.85rem;
+      }
+
+      .alert-item .alert-remove {
+        background: none;
+        border: none;
+        color: var(--red);
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.85rem;
+        flex: 1;
+      }
+
+      .btn-primary {
+        background: var(--brand);
+        border: 1px solid var(--brand);
+        color: #000;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.85rem;
+        flex: 1;
+      }
+
+      /* ---------- Toasts ---------- */
+      .toast-wrap {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        z-index: 200;
+      }
+
+      .toast {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--brand);
+        padding: 0.7rem 1rem;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        animation: slideIn 0.3s ease;
+        max-width: 320px;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: none;
+          opacity: 1;
+        }
+      }
+
+      @media (max-width: 720px) {
+        body {
+          padding: 1rem 0.5rem;
+        }
+        th,
+        td {
+          padding: 0.6rem 0.5rem;
+        }
+      }
     </style>
   </head>
   <body>
     <header class="header">
       <div class="logo-wrapper">
-        <img src="readme-icon.svg" alt="Crypto Market Screener Icon" class="header-logo" width="140" height="93" />
+        <img src="readme-icon.svg" alt="Crypto Market Screener Icon" class="header-logo" width="120" height="80" />
       </div>
       <h1>Live Market Screener</h1>
       <p>Real-time data directly from Delta Exchange. 0ms Latency.</p>
     </header>
 
-    <main style="width: 100%; max-width: 900px; display: flex; flex-direction: column; align-items: center;">
+    <!-- ===== AD SLOT #1 (Main leaderboard banner - popcash) ===== -->
+    <div class="ad-slot">
+      <div class="ad-slot-main" id="ad-main-1">
+        <script>
+          atOptions = {
+            key: "15ae39b62c33869c2f3b4de79a357d9e",
+            format: "iframe",
+            height: 90,
+            width: 728,
+            params: {},
+          };
+        </script>
+        <script src="https://www.highperformanceformat.com/15ae39b62c33869c2f3b4de79a357d9e/invoke.js"></script>
+      </div>
+    </div>
+
+    <main class="layout">
+      <!-- Market Overview Bar -->
+      <div class="overview" aria-label="Market overview">
+        <div class="stat">
+          <span class="stat-label">Gainers</span>
+          <span class="stat-value positive" id="stat-gainers">--</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Losers</span>
+          <span class="stat-value negative" id="stat-losers">--</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Best Mover</span>
+          <span class="stat-value" id="stat-best">--</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Worst Mover</span>
+          <span class="stat-value" id="stat-worst">--</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Avg 24h Change</span>
+          <span class="stat-value" id="stat-avg">--</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
       <div class="controls">
         <input
           type="text"
@@ -309,32 +719,119 @@
           placeholder="Search pairs (e.g., BTC, SOL, DOGE)..."
           aria-label="Search crypto pairs"
         />
-        <button class="btn" onclick="sortByChange('desc')" aria-label="Sort by Top Gainers">🔥 Top Gainers</button>
-        <button class="btn" onclick="sortByChange('asc')" aria-label="Sort by Top Losers">🩸 Top Losers</button>
+        <button class="btn" onclick="enableNotifications()" aria-label="Enable price alerts">🔔 Enable Alerts</button>
+        <button class="btn" onclick="exportCSV()" aria-label="Export table as CSV">⬇ Export CSV</button>
       </div>
 
+      <!-- Tabs -->
+      <div class="tabs" id="tabs" role="tablist">
+        <button class="tab active" data-tab="all" onclick="setTab('all')" role="tab">All</button>
+        <button class="tab" data-tab="gainers" onclick="setTab('gainers')" role="tab">🟢 Gainers</button>
+        <button class="tab" data-tab="losers" onclick="setTab('losers')" role="tab">🔴 Losers</button>
+        <button class="tab" data-tab="volatile" onclick="setTab('volatile')" role="tab">🎢 Volatile (5%+)</button>
+        <button class="tab" data-tab="watchlist" onclick="setTab('watchlist')" role="tab">⭐ Watchlist</button>
+      </div>
+
+      <!-- ===== AD SLOT #2 (Duplicated popcash banner) ===== -->
+      <div class="ad-slot">
+        <div class="ad-slot-main" id="ad-main-2">
+          <script>
+            atOptions = {
+              key: "15ae39b62c33869c2f3b4de79a357d9e",
+              format: "iframe",
+              height: 90,
+              width: 728,
+              params: {},
+            };
+          </script>
+          <script src="https://www.highperformanceformat.com/15ae39b62c33869c2f3b4de79a357d9e/invoke.js"></script>
+        </div>
+      </div>
+
+      <!-- Screener Table -->
       <div class="screener-container">
         <table>
           <thead>
             <tr>
-              <th scope="col">Pair</th>
-              <th scope="col">Mark Price (USD)</th>
-              <th scope="col">24h Volatility</th>
+              <th scope="col" aria-label="Add to watchlist">★</th>
+              <th scope="col" class="sortable" data-sort="pair" id="th-pair">Pair</th>
+              <th scope="col" class="sortable" data-sort="price" id="th-price">Mark Price</th>
+              <th scope="col" class="sortable" data-sort="change" id="th-change">24h Change</th>
+              <th scope="col" class="sortable" data-sort="high" id="th-high">24h High</th>
+              <th scope="col" class="sortable" data-sort="low" id="th-low">24h Low</th>
+              <th scope="col" class="sortable" data-sort="volume" id="th-volume">24h Volume</th>
+              <th scope="col">Trend</th>
+              <th scope="col" aria-label="Set price alert">Alert</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody id="screener-body"></tbody>
         </table>
       </div>
+
+      <!-- ===== AD SLOT #3 (Duplicated popcash banner) ===== -->
+      <div class="ad-slot">
+        <div class="ad-slot-main" id="ad-main-3">
+          <script>
+            atOptions = {
+              key: "15ae39b62c33869c2f3b4de79a357d9e",
+              format: "iframe",
+              height: 90,
+              width: 728,
+              params: {},
+            };
+          </script>
+          <script src="https://www.highperformanceformat.com/15ae39b62c33869c2f3b4de79a357d9e/invoke.js"></script>
+        </div>
+      </div>
     </main>
 
     <footer class="status">
-      <span class="live-dot" aria-hidden="true"></span>
-      <span id="ws-status">Connecting to Delta Exchange...</span>
+      <div>
+        <span class="live-dot" aria-hidden="true"></span>
+        <span id="ws-status">Connecting to Delta Exchange...</span>
+      </div>
+      <div>
+        Built with <a href="https://www.delta.exchange?code=STJSWZ" target="_blank" rel="noopener">Delta Exchange</a> data &middot;
+        <a href="https://github.com/rishibanota" target="_blank" rel="noopener">GitHub</a> &middot;
+        <a href="#" onclick="toggleDisclaimer(event)">Disclaimer</a>
+      </div>
+      <div id="disclaimer" style="display: none; max-width: 760px; line-height: 1.5; font-size: 0.8rem">
+        Trading cryptocurrency involves substantial risk of loss and is not suitable for every investor. The live prices on this site
+        are for informational purposes only and are not financial advice. Some links are affiliate links - we may earn a commission
+        at no extra cost to you. Please trade responsibly and only with money you can afford to lose.
+      </div>
     </footer>
 
+    <!-- Price Alert Modal -->
+    <div class="modal-overlay" id="alert-modal" role="dialog" aria-modal="true">
+      <div class="modal">
+        <h3>🔔 Price Alert</h3>
+        <p class="modal-sub">Get notified when <span id="alert-symbol">--</span> crosses your target.</p>
+
+        <label for="alert-target">Target price (USD)</label>
+        <input type="number" id="alert-target" step="any" placeholder="e.g. 100000" />
+
+        <label for="alert-dir">Trigger when price goes</label>
+        <select id="alert-dir">
+          <option value="above">Above target</option>
+          <option value="below">Below target</option>
+        </select>
+
+        <div class="modal-actions">
+          <button class="btn-primary" onclick="addAlert()">Add Alert</button>
+          <button class="btn-ghost" onclick="closeAlertModal()">Close</button>
+        </div>
+
+        <div class="alert-list" id="alert-list"></div>
+      </div>
+    </div>
+
+    <!-- Toast container (in-page notifications fallback) -->
+    <div class="toast-wrap" id="toast-wrap"></div>
+
     <script>
-      // 1. Array of 50+ Popular Coins
+      // 1. Array of 150+ Popular Coins
       const symbols = [
         "BTCUSD",
         "ETHUSD",
@@ -528,158 +1025,508 @@
         "IOUSD",
         "LISTAUSD",
       ];
-      // YOUR AFFILIATE CODE HERE
-      const myAffiliateCode = "STJSWZ";
 
+      // YOUR AFFILIATE CODE HERE (used on every "Trade" link -> Delta Exchange)
+      const myAffiliateCode = "STJSWZ";
+      const affiliateBase = `https://www.delta.exchange?code=${myAffiliateCode}`;
+
+      // ---------- DOM refs ----------
       const tbody = document.getElementById("screener-body");
       const statusText = document.getElementById("ws-status");
       const searchInput = document.getElementById("search");
 
-      // 2. High-Performance DOM Cache
+      // ---------- State ----------
       const domCache = {};
-      const dataState = {}; // Stores latest prices and changes for sorting
+      const dataState = {}; // sym -> { price, open, high, low, vol, change, hist[] }
+      let favorites = [];
+      let alerts = [];
+      let currentTab = "all";
+      let currentSort = { key: "pair", dir: 1 };
+      let alertModalSym = null;
 
-      // Render initial table
+      try {
+        favorites = JSON.parse(localStorage.getItem("wsl_favorites") || "[]");
+      } catch (e) {
+        favorites = [];
+      }
+      try {
+        alerts = JSON.parse(localStorage.getItem("wsl_alerts") || "[]");
+      } catch (e) {
+        alerts = [];
+      }
+
+      // ---------- Formatting helpers ----------
+      function fmtPrice(n) {
+        if (n == null || isNaN(n)) return "—";
+        if (n > 1000)
+          return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        if (n > 10) return "$" + n.toFixed(2);
+        return "$" + n.toFixed(4);
+      }
+
+      function fmtVol(v) {
+        if (v == null || isNaN(v) || v <= 0) return "—";
+        if (v >= 1e9) return "$" + (v / 1e9).toFixed(2) + "B";
+        if (v >= 1e6) return "$" + (v / 1e6).toFixed(2) + "M";
+        if (v >= 1e3) return "$" + (v / 1e3).toFixed(2) + "K";
+        return "$" + v.toFixed(0);
+      }
+
+      function fmtName(sym) {
+        return sym.replace("USD", "/USD");
+      }
+
+      // ---------- Toasts ----------
+      function toast(msg) {
+        const wrap = document.getElementById("toast-wrap");
+        const el = document.createElement("div");
+        el.className = "toast";
+        el.textContent = msg;
+        wrap.appendChild(el);
+        setTimeout(() => el.remove(), 4000);
+      }
+
+      // ---------- Build table rows ----------
       symbols.forEach((sym) => {
         const tr = document.createElement("tr");
         tr.id = `row-${sym}`;
-
-        // Format coin name (e.g. BTCUSD -> BTC/USD)
-        const formattedName = sym.replace("USD", "/USD");
-        const affiliateLink = `https://www.delta.exchange?code=${myAffiliateCode}`;
+        const affiliateLink = affiliateBase;
 
         tr.innerHTML = `
-                <td class="symbol">${formattedName}</td>
+                <td><button class="star-btn" id="star-${sym}" onclick="toggleFav('${sym}')" aria-label="Add ${sym} to watchlist">☆</button></td>
+                <td class="symbol">${fmtName(sym)}</td>
                 <td id="price-${sym}" class="price-col">Connecting...</td>
-                <td id="change-${sym}">--</td>
-                <td><a href="${affiliateLink}" target="_blank" class="trade-btn">Trade</a></td>
+                <td id="change-${sym}" class="muted">--</td>
+                <td id="high-${sym}" class="muted">--</td>
+                <td id="low-${sym}" class="muted">--</td>
+                <td id="vol-${sym}" class="muted">--</td>
+                <td><span class="sparkline" id="spark-${sym}"></span></td>
+                <td><button class="bell-btn" id="bell-${sym}" onclick="openAlertModal('${sym}')" aria-label="Set alert for ${sym}">🔔</button></td>
+                <td><a href="${affiliateLink}" target="_blank" rel="noopener" class="trade-btn">Trade</a></td>
             `;
         tbody.appendChild(tr);
 
-        // Cache elements so browser doesn't search for them every millisecond
         domCache[sym] = {
           row: tr,
           priceEl: document.getElementById(`price-${sym}`),
           changeEl: document.getElementById(`change-${sym}`),
+          highEl: document.getElementById(`high-${sym}`),
+          lowEl: document.getElementById(`low-${sym}`),
+          volEl: document.getElementById(`vol-${sym}`),
+          starBtn: document.getElementById(`star-${sym}`),
+          bellBtn: document.getElementById(`bell-${sym}`),
         };
 
-        dataState[sym] = { price: 0, change: 0 };
+        dataState[sym] = { price: 0, open: 0, high: 0, low: 0, vol: 0, change: 0, hist: [] };
       });
 
-      // Search Filter Logic
-      searchInput.addEventListener("input", (e) => {
-        const term = e.target.value.toUpperCase();
+      // ---------- Watchlist (favorites) ----------
+      function toggleFav(sym) {
+        const i = favorites.indexOf(sym);
+        if (i > -1) favorites.splice(i, 1);
+        else favorites.push(sym);
+        localStorage.setItem("wsl_favorites", JSON.stringify(favorites));
+        renderFavIcons();
+        if (currentTab === "watchlist") applyFilters();
+      }
+
+      function renderFavIcons() {
         symbols.forEach((sym) => {
-          if (sym.includes(term)) {
-            domCache[sym].row.style.display = "";
-          } else {
-            domCache[sym].row.style.display = "none";
+          const btn = domCache[sym].starBtn;
+          const fav = favorites.includes(sym);
+          btn.textContent = fav ? "★" : "☆";
+          btn.classList.toggle("on", fav);
+        });
+      }
+
+      // ---------- Tabs + search filtering ----------
+      function tabVisible(sym) {
+        const s = dataState[sym];
+        switch (currentTab) {
+          case "gainers":
+            return s.change > 0;
+          case "losers":
+            return s.change < 0;
+          case "volatile":
+            return Math.abs(s.change) >= 5;
+          case "watchlist":
+            return favorites.includes(sym);
+          default:
+            return true;
+        }
+      }
+
+      function applyFilters() {
+        const term = searchInput.value.trim().toUpperCase();
+        symbols.forEach((sym) => {
+          const visible = tabVisible(sym) && sym.includes(term);
+          domCache[sym].row.style.display = visible ? "" : "none";
+        });
+      }
+
+      function setTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll(".tab").forEach((b) => b.classList.toggle("active", b.dataset.tab === tab));
+        applyFilters();
+      }
+
+      searchInput.addEventListener("input", applyFilters);
+
+      // ---------- Sorting ----------
+      function sortValue(sym, key) {
+        switch (key) {
+          case "pair":
+            return sym;
+          case "price":
+            return dataState[sym].price;
+          case "change":
+            return dataState[sym].change;
+          case "high":
+            return dataState[sym].high;
+          case "low":
+            return dataState[sym].low;
+          case "volume":
+            return dataState[sym].vol;
+          default:
+            return 0;
+        }
+      }
+
+      function applySort() {
+        const key = currentSort.key;
+        const sorted = [...symbols].sort((a, b) => {
+          const va = sortValue(a, key);
+          const vb = sortValue(b, key);
+          if (key === "pair") return currentSort.dir * String(va).localeCompare(String(vb));
+          if (va === vb) return 0;
+          return currentSort.dir * (va - vb);
+        });
+        sorted.forEach((sym) => tbody.appendChild(domCache[sym].row));
+        updateSortIndicators();
+      }
+
+      function updateSortIndicators() {
+        document.querySelectorAll("th.sortable").forEach((th) => {
+          th.classList.remove("sorted-asc", "sorted-desc");
+          if (th.dataset.sort === currentSort.key) {
+            th.classList.add(currentSort.dir === 1 ? "sorted-asc" : "sorted-desc");
           }
         });
+      }
+
+      document.querySelectorAll("th.sortable").forEach((th) => {
+        th.addEventListener("click", () => {
+          const key = th.dataset.sort;
+          if (currentSort.key === key) currentSort.dir *= -1;
+          else currentSort = { key, dir: 1 };
+          applySort();
+        });
       });
 
-      // Sorting Logic (Top Gainers / Losers)
-      window.sortByChange = function (direction) {
-        const sortedSymbols = [...symbols].sort((a, b) => {
-          if (direction === "desc")
-            return dataState[b].change - dataState[a].change;
-          return dataState[a].change - dataState[b].change;
+      // ---------- Sparklines ----------
+      function drawSparkline(sym) {
+        const el = document.getElementById(`spark-${sym}`);
+        if (!el) return;
+        const hist = dataState[sym].hist;
+        if (hist.length < 2) {
+          el.innerHTML = "";
+          return;
+        }
+        const w = 80;
+        const h = 22;
+        let min = Infinity;
+        let max = -Infinity;
+        for (const p of hist) {
+          if (p < min) min = p;
+          if (p > max) max = p;
+        }
+        const range = max - min || 1;
+        const pts = hist
+          .map((p, i) => {
+            const x = ((i / (hist.length - 1)) * (w - 2) + 1).toFixed(1);
+            const y = (h - ((p - min) / range) * (h - 4) - 2).toFixed(1);
+            return `${x},${y}`;
+          })
+          .join(" ");
+        const up = hist[hist.length - 1] >= hist[0];
+        const col = up ? "var(--green)" : "var(--red)";
+        el.innerHTML = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="1.5"/></svg>`;
+      }
+
+      // ---------- Market overview ----------
+      function updateOverview() {
+        let gainers = 0;
+        let losers = 0;
+        let best = null;
+        let worst = null;
+        let sum = 0;
+        let n = 0;
+        for (const sym of symbols) {
+          const s = dataState[sym];
+          if (!s.change && s.change !== 0) continue;
+          if (s.change > 0.0001) gainers++;
+          else if (s.change < -0.0001) losers++;
+          if (best === null || s.change > best.c) best = { sym, c: s.change };
+          if (worst === null || s.change < worst.c) worst = { sym, c: s.change };
+          sum += s.change;
+          n++;
+        }
+        document.getElementById("stat-gainers").textContent = gainers || "--";
+        document.getElementById("stat-losers").textContent = losers || "--";
+        document.getElementById("stat-best").textContent = best ? `${fmtName(best.sym)} ${best.c.toFixed(2)}%` : "--";
+        document.getElementById("stat-worst").textContent = worst ? `${fmtName(worst.sym)} ${worst.c.toFixed(2)}%` : "--";
+        document.getElementById("stat-avg").textContent = n ? (sum / n).toFixed(2) + "%" : "--";
+      }
+
+      // ---------- Price alerts ----------
+      function enableNotifications() {
+        if (!("Notification" in window)) {
+          toast("Notifications are not supported in this browser.");
+          return;
+        }
+        Notification.requestPermission().then((perm) => {
+          toast(perm === "granted" ? "Alerts enabled. Click the bell on any pair." : "Alerts blocked by browser.");
         });
+      }
 
-        // Reorder the DOM based on sorted array
-        sortedSymbols.forEach((sym) => {
-          tbody.appendChild(domCache[sym].row);
+      function notify(title, body) {
+        if ("Notification" in window && Notification.permission === "granted") {
+          try {
+            new Notification(title, { body, tag: title });
+          } catch (e) {
+            /* some browsers require a service worker - fall back to toast */
+          }
+        }
+        toast(`${title}: ${body}`);
+      }
+
+      function saveAlerts() {
+        localStorage.setItem("wsl_alerts", JSON.stringify(alerts));
+      }
+
+      function openAlertModal(sym) {
+        alertModalSym = sym;
+        document.getElementById("alert-symbol").textContent = fmtName(sym);
+        document.getElementById("alert-target").value = dataState[sym].price || "";
+        renderAlertList();
+        document.getElementById("alert-modal").classList.add("open");
+      }
+
+      function closeAlertModal() {
+        document.getElementById("alert-modal").classList.remove("open");
+      }
+
+      function addAlert() {
+        const target = parseFloat(document.getElementById("alert-target").value);
+        const dir = document.getElementById("alert-dir").value;
+        if (!alertModalSym || isNaN(target) || target <= 0) {
+          toast("Please enter a valid target price.");
+          return;
+        }
+        alerts.push({ id: Date.now(), sym: alertModalSym, target, dir, fired: false });
+        saveAlerts();
+        renderAlertList();
+        renderAlertIcons();
+        toast(`Alert set for ${fmtName(alertModalSym)} @ ${target} (${dir}).`);
+      }
+
+      function removeAlert(id) {
+        alerts = alerts.filter((a) => a.id !== id);
+        saveAlerts();
+        renderAlertList();
+        renderAlertIcons();
+      }
+
+      function renderAlertList() {
+        const list = document.getElementById("alert-list");
+        if (!alerts.length) {
+          list.innerHTML = '<div class="muted" style="font-size:0.8rem">No active alerts.</div>';
+          return;
+        }
+        list.innerHTML = alerts
+          .map(
+            (a) =>
+              `<div class="alert-item">
+                <span>${fmtName(a.sym)} → ${a.dir === "above" ? "⬆" : "⬇"} $${Number(a.target).toLocaleString()}</span>
+                <button class="alert-remove" onclick="removeAlert(${a.id})">✕</button>
+              </div>`
+          )
+          .join("");
+      }
+
+      function renderAlertIcons() {
+        symbols.forEach((sym) => {
+          const has = alerts.some((a) => a.sym === sym);
+          domCache[sym].bellBtn.classList.toggle("on", has);
         });
-      };
+      }
 
-      // 3. Delta Exchange WebSockets connection
-      const ws = new WebSocket("wss://public-socket.india.delta.exchange");
+      function checkAlerts(sym, price) {
+        let changed = false;
+        alerts.forEach((a) => {
+          if (a.sym !== sym) return;
+          const crossed = a.dir === "above" ? price >= a.target : price <= a.target;
+          if (crossed && !a.fired) {
+            a.fired = true;
+            changed = true;
+            notify(
+              `${fmtName(sym)} price alert`,
+              `${fmtName(sym)} is now $${price.toLocaleString()} - went ${a.dir} your target of $${a.target.toLocaleString()}.`
+            );
+          }
+          const reset = a.dir === "above" ? price < a.target * 0.995 : price > a.target * 1.005;
+          if (reset) a.fired = false;
+        });
+        if (changed) saveAlerts();
+      }
 
-      ws.onopen = () => {
-        statusText.textContent = `Live tracking ${symbols.length} pairs`;
+      // ---------- Export CSV ----------
+      function exportCSV() {
+        const header = ["Pair", "Mark Price (USD)", "24h Change %", "24h High", "24h Low", "24h Volume (USD)"];
+        const rows = [header];
+        symbols.forEach((sym) => {
+          if (domCache[sym].row.style.display === "none") return;
+          const s = dataState[sym];
+          rows.push([fmtName(sym), s.price || "", s.change || "", s.high || "", s.low || "", s.vol || ""]);
+        });
+        const csv = rows
+          .map((r) => r.map((x) => `"${String(x).replace(/"/g, '""')}"`).join(","))
+          .join("\r\n");
+        const blob = new Blob([csv], { type: "text/csv" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "crypto-screener.csv";
+        a.click();
+        URL.revokeObjectURL(a.href);
+        toast(`Exported ${rows.length - 1} rows to CSV.`);
+      }
 
-        // Delta allows up to 100 symbols per connection. We are sending ~53.
-        const subscribeMsg = {
-          type: "subscribe",
-          payload: {
-            channels: [
-              {
-                name: "ticker",
-                symbols: symbols,
-              },
-            ],
-          },
+      // ---------- Disclaimer toggle ----------
+      function toggleDisclaimer(e) {
+        e.preventDefault();
+        const d = document.getElementById("disclaimer");
+        d.style.display = d.style.display === "none" ? "block" : "none";
+      }
+
+      // ---------- WebSocket (with auto-reconnect) ----------
+      const WS_URL = "wss://public-socket.india.delta.exchange";
+      let ws = null;
+      let retries = 0;
+
+      function connect() {
+        ws = new WebSocket(WS_URL);
+
+        ws.onopen = () => {
+          retries = 0;
+          statusText.textContent = `Live tracking ${symbols.length} pairs`;
+          document.querySelector(".live-dot").style.background = "var(--green)";
+          const subscribeMsg = {
+            type: "subscribe",
+            payload: {
+              channels: [{ name: "ticker", symbols: symbols }],
+            },
+          };
+          ws.send(JSON.stringify(subscribeMsg));
         };
-        ws.send(JSON.stringify(subscribeMsg));
-      };
 
-      ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
+        ws.onmessage = (event) => {
+          let data;
+          try {
+            data = JSON.parse(event.data);
+          } catch (e) {
+            return;
+          }
 
-        if (data.type === "ticker" && data.d) {
-          const tick = data.d[0];
-          const sym = data.sy;
+          if (data.type === "ticker" && data.d) {
+            const tick = data.d[0];
+            const sym = data.sy;
+            if (!domCache[sym]) return;
 
-          // If it's a symbol we care about, update UI
-          if (domCache[sym]) {
             const newPrice = parseFloat(tick.m);
-            const change24h = parseFloat(tick.m24hc);
+            if (isNaN(newPrice)) return;
+            const change24h = parseFloat(tick.m24hc) || 0;
+
+            // 24h OHLC: [open, high, low, close] - guard in case field is missing
+            const ohlc = Array.isArray(tick.ohlc) ? tick.ohlc : [];
+            const open = parseFloat(ohlc[0]) || 0;
+            const high = parseFloat(ohlc[1]) || 0;
+            const low = parseFloat(ohlc[2]) || 0;
+            // 24h volume (base units) -> notional USD = volume * mark price
+            const vol = (parseFloat(tick.v) || 0) * newPrice;
 
             const cache = domCache[sym];
             const state = dataState[sym];
 
-            // Format appropriately based on asset value
-            let formattedPrice = newPrice.toFixed(4);
-            if (newPrice > 10) formattedPrice = newPrice.toFixed(2);
-            if (newPrice > 1000)
-              formattedPrice = newPrice.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              });
-
-            // Trigger flash animation only if price changed
+            // Flash on price change
             if (state.price !== 0 && newPrice !== state.price) {
-              cache.priceEl.className = "price-col"; // reset
-              void cache.priceEl.offsetWidth; // trigger reflow to restart CSS animation
-              cache.priceEl.className =
-                newPrice > state.price
-                  ? "price-col flash-up"
-                  : "price-col flash-down";
+              cache.priceEl.className = "price-col";
+              void cache.priceEl.offsetWidth;
+              cache.priceEl.className = newPrice > state.price ? "price-col flash-up" : "price-col flash-down";
             }
 
-            // Update Text
-            cache.priceEl.textContent = `$${formattedPrice}`;
+            cache.priceEl.textContent = fmtPrice(newPrice);
 
-            // Update Change Color & Text
             if (change24h > 0) {
               cache.changeEl.textContent = `+${change24h.toFixed(2)}%`;
               cache.changeEl.className = "positive";
             } else {
               cache.changeEl.textContent = `${change24h.toFixed(2)}%`;
-              cache.changeEl.className = "negative";
+              cache.changeEl.className = change24h < 0 ? "negative" : "muted";
             }
+
+            cache.highEl.textContent = high ? fmtPrice(high) : "—";
+            cache.highEl.className = "muted";
+            cache.lowEl.textContent = low ? fmtPrice(low) : "—";
+            cache.lowEl.className = "muted";
+            cache.volEl.textContent = vol ? fmtVol(vol) : "—";
+            cache.volEl.className = "muted";
 
             // Save latest state
             state.price = newPrice;
+            state.open = open;
+            state.high = high;
+            state.low = low;
+            state.vol = vol;
             state.change = change24h;
-          }
-        }
-      };
 
-      ws.onclose = () => {
-        statusText.textContent = "Disconnected. Refresh the page to reconnect.";
-        document.querySelector(".live-dot").style.background = "red";
-      };
+            // Append to sparkline history (cap at 60 points)
+            state.hist.push(newPrice);
+            if (state.hist.length > 60) state.hist.shift();
+
+            // Check price alerts
+            checkAlerts(sym, newPrice);
+          }
+        };
+
+        ws.onclose = () => {
+          statusText.textContent = "Disconnected. Reconnecting...";
+          document.querySelector(".live-dot").style.background = "var(--red)";
+          const delay = Math.min(1000 * Math.pow(2, retries), 30000);
+          retries++;
+          setTimeout(connect, delay);
+        };
+
+        ws.onerror = () => {
+          ws.close();
+        };
+      }
+
+      // ---------- Throttled UI updaters ----------
+      setInterval(() => {
+        // Redraw sparklines for visible rows every 1.5s
+        symbols.forEach((sym) => {
+          if (domCache[sym].row.style.display !== "none") drawSparkline(sym);
+        });
+      }, 1500);
+
+      setInterval(updateOverview, 2000);
+
+      // ---------- Init ----------
+      renderFavIcons();
+      renderAlertIcons();
+      updateSortIndicators();
+      applyFilters();
+      connect();
     </script>
-    <script>
-      atOptions = {
-        key: "15ae39b62c33869c2f3b4de79a357d9e",
-        format: "iframe",
-        height: 90,
-        width: 728,
-        params: {},
-      };
-    </script>
-    <script src="https://www.highperformanceformat.com/15ae39b62c33869c2f3b4de79a357d9e/invoke.js"></script>
   </body>
 </html>
